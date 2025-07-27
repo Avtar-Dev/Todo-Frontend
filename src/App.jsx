@@ -3,10 +3,12 @@ import Login from "./Screens/Login";
 import SignUp from "./Screens/SignUp";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Todo from "./Screens/Todo";
+import NotificationSetup from "./firebase/noticeficationSetup";
 
 function App() {
   return (
     <div>
+      <NotificationSetup />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
