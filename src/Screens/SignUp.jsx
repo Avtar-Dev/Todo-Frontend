@@ -1,80 +1,7 @@
-// import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-
-// const SignUp = () => {
-//   const [name, setName] = useState("");
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-
-//   const navigate = useNavigate();
-//   const userSign = async () => {
-//     try {
-//       const res = await fetch("http://localhost:3000/user/signup", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ name, email, password }),
-//       });
-
-//       const data = await res.json();
-//       if (data.success) {
-//         setName("");
-//         setEmail("");
-//         setPassword("");
-//         alert("User Created Successfully");
-//       } else {
-//         alert("User already exists");
-//       }
-//       console.log("Response:", data);
-//     } catch (error) {
-//       console.error("Signup Error:", error);
-//     }
-//   };
-
-//   return (
-//     <>
-//       <div>
-//         <input
-//           type="text"
-//           placeholder="Enter Name"
-//           value={name}
-//           onChange={(e) => setName(e.target.value)}
-//         />
-
-//         <input
-//           type="email"
-//           placeholder="Enter Email"
-//           value={email}
-//           onChange={(e) => setEmail(e.target.value)}
-//         />
-
-//         <input
-//           type="password"
-//           placeholder="Enter Password"
-//           value={password}
-//           onChange={(e) => setPassword(e.target.value)}
-//         />
-
-//         <button onClick={userSign}>SignUp</button>
-//       </div>
-//       <div>
-//         <p>
-//           If you already have an account then{" "}
-//           <p onClick={() => navigate("/")}>Login</p>
-//         </p>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default SignUp;
-
-// src/components/SignUp.jsx
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signupUser } from "../api/user"; // ✅ API function import
+import { signupUser } from "../api/user";
+import starss from "../assets/starss.jpeg";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -82,16 +9,18 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  const inputClass = "border-2 border-fuchsia-500 p-2 rounded-2xl";
+
   const handleSignUp = async () => {
     try {
-      const data = await signupUser(name, email, password); // ✅ Call API
+      const data = await signupUser(name, email, password);
 
       if (data.success) {
         alert("User created successfully");
         setName("");
         setEmail("");
         setPassword("");
-        navigate("/"); // Redirect to login
+        navigate("/");
       } else {
         alert("User already exists");
       }
@@ -101,36 +30,43 @@ const SignUp = () => {
   };
 
   return (
-    <div>
-      <h2>Sign Up</h2>
+    <div
+      className="h-screen text-white"
+      style={{ backgroundImage: `url(${starss})` }}>
+      <div className="flex flex-col justify-center items-center gap-3 border-2 border-blue-800 w-100 h-100 rounded-2xl mx-auto mt-auto">
+        <h2>Sign Up</h2>
 
-      <input
-        type="text"
-        placeholder="Enter Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
+        <input
+          className={inputClass}
+          type="text"
+          placeholder="Enter Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
 
-      <input
-        type="email"
-        placeholder="Enter Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+        <input
+          className={inputClass}
+          type="email"
+          placeholder="Enter Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-      <input
-        type="password"
-        placeholder="Enter Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <input
+          className={inputClass}
+          type="password"
+          placeholder="Enter Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-      <button onClick={handleSignUp}>Sign Up</button>
+        <button onClick={handleSignUp}>Sign Up</button>
 
-      <p>
-        Already have an account?{" "}
-        <button onClick={() => navigate("/")}>Login</button>
-      </p>
+        <p>
+          Already have an account?{" "}
+          <button onClick={() => navigate("/")}>Login</button>
+        </p>
+      </div>
     </div>
   );
 };

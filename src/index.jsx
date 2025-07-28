@@ -1,4 +1,3 @@
-// Register firebase-messaging service worker
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
     .register("/firebase-messaging-sw.js")

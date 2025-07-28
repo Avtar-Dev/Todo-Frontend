@@ -3,11 +3,11 @@ import Login from "./Screens/Login";
 import SignUp from "./Screens/SignUp";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Todo from "./Screens/Todo";
-import NotificationSetup from "./firebase/noticeficationSetup";
+import NotificationSetup from "./firebase/NoticeficationSetup";
 
 function App() {
   return (
-    <div>
+    <div className="">
       <NotificationSetup />
       <BrowserRouter>
         <Routes>

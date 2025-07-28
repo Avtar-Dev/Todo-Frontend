@@ -1,4 +1,3 @@
-// NotificationSetup.jsx
 import { useEffect } from "react";
 import { messaging } from "./firebase";
 import { getToken } from "firebase/messaging";

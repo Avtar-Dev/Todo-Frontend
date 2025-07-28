@@ -1,4 +1,3 @@
-// src/firebase.js
 import { initializeApp, getApps } from "firebase/app";
 import { getMessaging } from "firebase/messaging";
 
@@ -12,11 +11,9 @@ const firebaseConfig = {
   measurementId: "G-G7ZXWWYMCE",
 };
 
-// ✅ Prevent duplicate initialization
 const app =
   getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
-// ✅ Export messaging
 const messaging = getMessaging(app);
 
 export { messaging };
