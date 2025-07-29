@@ -9,6 +9,7 @@ import {
 
 import { messaging } from "../firebase/firebase";
 import { getToken } from "firebase/messaging";
+import useFCMToken from "../firebase/NoticeficationSetup";
 
 const Todo = () => {
   const [editClick, setEditClick] = useState(false);
@@ -35,6 +36,7 @@ const Todo = () => {
     setState((prev) => ({ ...prev, todos: data.todos }));
   };
 
+  useFCMToken();
   useEffect(() => {
     const fetchFcmToken = async () => {
       try {
@@ -194,3 +196,370 @@ const Todo = () => {
 };
 
 export default Todo;
+
+// .......................................React.........................
+
+// import React, { useEffect, useState } from "react";
+// import {
+//   getTodosApi,
+//   postTodoApi,
+//   editTodoApi,
+//   toggleTodoApi,
+//   deleteTodoApi,
+// } from "../api/todo";
+
+// import { messaging } from "../firebase/firebase";
+// import { getToken } from "firebase/messaging";
+// import useFCMToken from "../firebase/NoticeficationSetup";
+
+// const Todo = () => {
+//   const [editClick, setEditClick] = useState(false);
+//   const [editId, setEditId] = useState("");
+
+//   const [state, setState] = useState({
+//     title: "",
+//     task: "",
+//     completed: false,
+//     scheduledTime: "",
+//     todos: [],
+//   });
+
+//   const updateTitle = (e) =>
+//     setState((prev) => ({ ...prev, title: e.target.value }));
+
+//   const updateTask = (e) =>
+//     setState((prev) => ({ ...prev, task: e.target.value }));
+
+//   const fetchTodos = async () => {
+//     const token = localStorage.getItem("token");
+//     const data = await getTodosApi(token);
+//     setState((prev) => ({ ...prev, todos: data.todos }));
+//   };
+
+//   useFCMToken(); // For notification permission
+
+//   useEffect(() => {
+
+//     fetchTodos();
+//   }, []);
+
+//   const addTodo = async () => {
+//     const token = localStorage.getItem("token");
+//     const { title, task, scheduledTime } = state;
+
+//     if (!title || !task) {
+//       alert("Title and task are required");
+//       return;
+//     }
+
+//     const dateObject = new Date(scheduledTime);
+
+//     try {
+//       if (editClick) {
+//         await editTodoApi(token, editId, {
+//           title,
+//           task,
+//           completed: state.completed,
+//           scheduledTime: dateObject,
+//         });
+//         setEditClick(false);
+//         setEditId("");
+//       } else {
+//         await postTodoApi(token, {
+//           title,
+//           task,
+//           completed: false,
+//           scheduledTime: dateObject,
+//         });
+//         console.log(dateObject);
+//       }
+
+//       setState((prev) => ({
+//         ...prev,
+//         title: "",
+//         task: "",
+//         completed: false,
+//         scheduledTime: "",
+//       }));
+//       fetchTodos();
+//     } catch (error) {
+//       console.error("Error submitting todo:", error);
+//     }
+//   };
+
+//   const toggleCompleted = async (id) => {
+//     const token = localStorage.getItem("token");
+//     await toggleTodoApi(token, id);
+//     fetchTodos();
+//   };
+
+//   const editHandler = (id) => {
+//     const todoToEdit = state.todos.find((todo) => todo._id === id);
+//     if (todoToEdit) {
+//       setState((prev) => ({
+//         ...prev,
+//         title: todoToEdit.title,
+//         task: todoToEdit.task,
+//         completed: todoToEdit.completed,
+//       }));
+//       setEditId(id);
+//       setEditClick(true);
+//     }
+//   };
+
+//   const deleteTodo = async (id) => {
+//     const token = localStorage.getItem("token");
+//     try {
+//       await deleteTodoApi(token, id);
+//       setEditClick(false);
+//       fetchTodos();
+//     } catch (error) {
+//       console.error("Error deleting todo:", error);
+//     }
+//   };
+
+//   return (
+//     <div>
+//       <h2>{editClick ? "Edit Todo" : "Add New Todo"}</h2>
+
+//       <input
+//         type="text"
+//         placeholder="Title"
+//         value={state.title}
+//         onChange={updateTitle}
+//       />
+//       <input
+//         type="text"
+//         placeholder="Task"
+//         value={state.task}
+//         onChange={updateTask}
+//       />
+//       <input
+//         type="datetime-local"
+//         value={state.scheduledTime}
+//         onChange={(e) =>
+//           setState((prev) => ({ ...prev, scheduledTime: e.target.value }))
+//         }
+//       />
+//       <button onClick={addTodo}>
+//         {editClick ? "Update Todo" : "Add Todo"}
+//       </button>
+
+//       <div style={{ marginTop: "20px" }}>
+//         {state.todos.map((todo) => (
+//           <div key={todo._id} style={{ marginBottom: "15px" }}>
+//             <h4>{todo.title}</h4>
+//             <p>{todo.task}</p>
+//             <label>
+//               <input
+//                 type="checkbox"
+//                 checked={todo.completed}
+//                 onChange={() => toggleCompleted(todo._id)}
+//               />
+//               {todo.completed ? "Completed" : "Incomplete"}
+//             </label>
+//             <p>
+//               Scheduled at:{" "}
+//               {todo?.scheduledTime
+//                 ? new Date(todo.scheduledTime).toLocaleString("en-IN", {
+//                     timeZone: "Asia/Kolkata",
+//                   })
+//                 : "No time set"}
+//             </p>
+
+//             <div>
+//               <button onClick={() => editHandler(todo._id)}>Edit</button>
+//               <button onClick={() => deleteTodo(todo._id)}>Delete</button>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Todo;
+
+// import React, { useEffect, useState } from "react";
+// import {
+//   getTodosApi,
+//   postTodoApi,
+//   editTodoApi,
+//   toggleTodoApi,
+//   deleteTodoApi,
+// } from "../api/todo";
+
+// import useFCMToken from "../firebase/NoticeficationSetup";
+
+// const Todo = () => {
+//   const [editClick, setEditClick] = useState(false);
+//   const [editId, setEditId] = useState("");
+
+//   const [state, setState] = useState({
+//     title: "",
+//     task: "",
+//     completed: false,
+//     scheduledTime: "",
+//     todos: [],
+//   });
+
+//   // Get userId from JWT token
+//   const token = localStorage.getItem("token");
+//   let userId = "";
+//   if (token) {
+//     try {
+//       userId = JSON.parse(atob(token.split(".")[1]))?.userId || "";
+//     } catch (err) {
+//       console.error("Invalid JWT token");
+//     }
+//   }
+
+//   // ✅ Hook to register FCM token
+//   useFCMToken(userId);
+
+//   const fetchTodos = async () => {
+//     if (!token) return;
+//     const data = await getTodosApi(token);
+//     setState((prev) => ({ ...prev, todos: data.todos }));
+//   };
+
+//   useEffect(() => {
+//     fetchTodos();
+//   }, []);
+
+//   const updateTitle = (e) =>
+//     setState((prev) => ({ ...prev, title: e.target.value }));
+//   const updateTask = (e) =>
+//     setState((prev) => ({ ...prev, task: e.target.value }));
+
+//   const addTodo = async () => {
+//     if (!state.title || !state.task) {
+//       alert("Title and task are required");
+//       return;
+//     }
+
+//     const dateObject = new Date(state.scheduledTime);
+
+//     try {
+//       if (editClick) {
+//         await editTodoApi(token, editId, {
+//           title: state.title,
+//           task: state.task,
+//           completed: state.completed,
+//           scheduledTime: dateObject,
+//         });
+//         setEditClick(false);
+//         setEditId("");
+//       } else {
+//         await postTodoApi(token, {
+//           title: state.title,
+//           task: state.task,
+//           completed: false,
+//           scheduledTime: dateObject,
+//         });
+//       }
+
+//       setState((prev) => ({
+//         ...prev,
+//         title: "",
+//         task: "",
+//         completed: false,
+//         scheduledTime: "",
+//       }));
+//       fetchTodos();
+//     } catch (error) {
+//       console.error("Error submitting todo:", error);
+//     }
+//   };
+
+//   const toggleCompleted = async (id) => {
+//     await toggleTodoApi(token, id);
+//     fetchTodos();
+//   };
+
+//   const editHandler = (id) => {
+//     const todoToEdit = state.todos.find((todo) => todo._id === id);
+//     if (todoToEdit) {
+//       setState((prev) => ({
+//         ...prev,
+//         title: todoToEdit.title,
+//         task: todoToEdit.task,
+//         completed: todoToEdit.completed,
+//         scheduledTime: todoToEdit.scheduledTime,
+//       }));
+//       setEditId(id);
+//       setEditClick(true);
+//     }
+//   };
+
+//   const deleteTodo = async (id) => {
+//     try {
+//       await deleteTodoApi(token, id);
+//       setEditClick(false);
+//       fetchTodos();
+//     } catch (error) {
+//       console.error("Error deleting todo:", error);
+//     }
+//   };
+
+//   return (
+//     <div>
+//       <h2>{editClick ? "Edit Todo" : "Add New Todo"}</h2>
+
+//       <input
+//         type="text"
+//         placeholder="Title"
+//         value={state.title}
+//         onChange={updateTitle}
+//       />
+//       <input
+//         type="text"
+//         placeholder="Task"
+//         value={state.task}
+//         onChange={updateTask}
+//       />
+//       <input
+//         type="datetime-local"
+//         value={state.scheduledTime}
+//         onChange={(e) =>
+//           setState((prev) => ({ ...prev, scheduledTime: e.target.value }))
+//         }
+//       />
+//       <button onClick={addTodo}>
+//         {editClick ? "Update Todo" : "Add Todo"}
+//       </button>
+
+//       <div style={{ marginTop: "20px" }}>
+//         {state.todos.map((todo) => (
+//           <div key={todo._id} style={{ marginBottom: "15px" }}>
+//             <h4>{todo.title}</h4>
+//             <p>{todo.task}</p>
+//             <label>
+//               <input
+//                 type="checkbox"
+//                 checked={todo.completed}
+//                 onChange={() => toggleCompleted(todo._id)}
+//               />
+//               {todo.completed ? "Completed" : "Incomplete"}
+//             </label>
+//             <p>
+//               Scheduled at:{" "}
+//               {todo?.scheduledTime
+//                 ? new Date(todo.scheduledTime).toLocaleString("en-IN", {
+//                     timeZone: "Asia/Kolkata",
+//                   })
+//                 : "No time set"}
+//             </p>
+
+//             <div>
+//               <button onClick={() => editHandler(todo._id)}>Edit</button>
+//               <button onClick={() => deleteTodo(todo._id)}>Delete</button>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Todo;
